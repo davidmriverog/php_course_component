@@ -6,8 +6,23 @@ use Styde\Authenticator as Auth;
 
 class AccessHandler
 {
-    public static function check($rol)
+    /**
+     * @var Authenticator
+     */
+    protected $auth;
+
+    /**
+     * AccessHandler construct.
+     * 
+     * @param Auth $auth
+     */
+    public function __construct(Auth $auth)
     {
-        return Auth::check() && Auth::user()->rol === $rol;
+        $this->auth = $auth;
+    }
+
+    public function check($rol)
+    {
+        return $this->auth->check() && $this->auth->user()->rol === $rol;
     }
 }
