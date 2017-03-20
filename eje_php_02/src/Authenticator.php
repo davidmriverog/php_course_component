@@ -18,12 +18,12 @@ class Authenticator
     {
         if (static::$user !=null) {
             return static::$user;
-        } else {
-            $data = Session::get('user_data');
+        }
 
-            if (!is_null($data)) {
-                return static::$user = new User($data);
-            }
+        $data = Session::get('user_data');
+
+        if (!is_null($data)) {
+            return static::$user = new User($data);
         }
 
         return null;

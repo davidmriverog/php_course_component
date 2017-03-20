@@ -8,7 +8,7 @@ class SessionManager
 
     protected static $loaded = false;
 
-    public static function load()
+    protected static function load()
     {
         if (static::$loaded) return;
 
@@ -19,6 +19,8 @@ class SessionManager
 
     public static function get($key)
     {
+        static::load();
+
         return isset(static::$data[$key])
             ? static::$data[$key]
             : null;
