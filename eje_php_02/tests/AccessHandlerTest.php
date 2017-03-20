@@ -10,11 +10,4 @@ class AccessHandlerTest extends PHPUnit_Framework_TestCase
             AccessHandler::check('ADMIN')
         );
     }
-
-    public function test_deny_access()
-    {
-        $this->assertFalse(
-            AccessHandler::check('EDITOR')
-        );
-    }
 }
