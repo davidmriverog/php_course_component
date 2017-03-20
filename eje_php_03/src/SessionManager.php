@@ -28,7 +28,7 @@ class SessionManager
 
     protected function load()
     {
-        $this->data = $this->load();
+        $this->data = $this->driver->load();
     }
 
     public function get($key)
