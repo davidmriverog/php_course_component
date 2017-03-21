@@ -12,17 +12,19 @@ class AccessHandlerTest extends PHPUnit_Framework_TestCase
     {
         $driver = new SessionArrayDriver([
             'user_data'=>[
-                'name'=>'drivero',
+                'name'=>'David Rivero',
                 'rol'=>'ADMIN'
             ]
         ]);
-        //$driver = new SessionFileDriver();
+
+        $driver->load();
+
         $session = new SessionManager($driver);
         $auth = new Authenticator($session);
         $access = new AccessHandler($auth);
 
         $this->assertTrue(
-            $access->check("ADMIN")
+            $access->check('ADMIN')
         );
     }
 }

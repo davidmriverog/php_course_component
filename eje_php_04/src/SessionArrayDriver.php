@@ -10,11 +10,11 @@ class SessionArrayDriver implements DriverInterface
 
     public function __construct(array $data=array())
     {
-        $this->array = $array;
+        $this->data = $data;
     }
 
     public function load()
     {
-        $this->data;
+        return $this->data;
     }
 }
