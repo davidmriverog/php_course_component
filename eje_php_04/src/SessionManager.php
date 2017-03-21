@@ -2,6 +2,8 @@
 
 namespace Styde;
 
+use Styde\Driver\DriverInterface;
+
 class SessionManager
 {
     /**
@@ -18,9 +20,9 @@ class SessionManager
     /**
      * SessionManager construct.
      * 
-     * @param array   $data   
+     * @param DriverInterface $driver
      */
-    public function __construct(SessionFileDriver $driver)
+    public function __construct(DriverInterface $driver)
     {
         $this->driver = $driver;
         $this->load();

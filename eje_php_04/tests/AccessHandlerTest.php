@@ -4,12 +4,19 @@ use Styde\Authenticator;
 use Styde\AccessHandler;
 use Styde\SessionManager;
 use Styde\SessionFileDriver;
+use Styde\SessionArrayDriver;
 
 class AccessHandlerTest extends PHPUnit_Framework_TestCase
 {
     public function test_grant_access()
     {
-        $driver = new SessionFileDriver();
+        $driver = new SessionArrayDriver([
+            'user_data'=>[
+                'name'=>'drivero',
+                'rol'=>'ADMIN'
+            ]
+        ]);
+        //$driver = new SessionFileDriver();
         $session = new SessionManager($driver);
         $auth = new Authenticator($session);
         $access = new AccessHandler($auth);

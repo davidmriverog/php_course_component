@@ -2,7 +2,9 @@
 
 namespace Styde;
 
-class SessionFileDriver
+use Styde\Driver\DriverInterface;
+
+class SessionFileDriver implements DriverInterface
 {
     public function load()
     {
