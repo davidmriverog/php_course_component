@@ -2,7 +2,7 @@
 
 namespace Styde;
 
-use Styde\Authenticator as Auth;
+use Styde\Auth\AuthenticatorInterface as Auth;
 
 class AccessHandler
 {
