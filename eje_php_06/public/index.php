@@ -1,3 +1,7 @@
 <?php
 
-require(__DIR__.'/../views/index.php');
+require (__DIR__.'/../bootstrap/start.php');
+
+view('index',[
+
+]);
