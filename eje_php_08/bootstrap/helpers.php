@@ -1,5 +1,7 @@
 <?php
 
+use Styde\Container;
+
 function view($template,array $vars)
 {
 
@@ -19,7 +21,7 @@ function view($template,array $vars)
 
 function abort404()
 {
-    global $access;
+    $access = Container::getInstance()->access();
     
     http_response_code(404);
 

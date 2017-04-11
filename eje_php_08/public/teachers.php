@@ -2,9 +2,11 @@
 
 require (__DIR__.'/../bootstrap/start.php');
 
+use Styde\Container;
+
 function teacherController(){
 
-    global $access;
+    $access = Container::getInstance()->access();
 
     if(!$access->check('teachers')){
         abort404();
@@ -13,4 +15,4 @@ function teacherController(){
     view('teachers',compact('access'));
 }
 
-teacherController();
+return teacherController();

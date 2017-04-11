@@ -8,7 +8,7 @@ class Container
 
     protected $shared = array();
 
-    public function getInstance()
+    public static function getInstance()
     {
         if(static::$container === null)
             static::$container = new Container;
@@ -16,12 +16,12 @@ class Container
         return static::$container;
     }
 
-    public function setContainer(Container $container)
+    public static function setContainer(Container $container)
     {
         static::$container = $container;
     }
 
-    public function clearContainer()
+    public static function clearContainer()
     {
         static::$container = null;
     }
@@ -34,7 +34,7 @@ class Container
         $data = [
             'user_data'=>[
                 'name'=>'David Rivero',
-                'rol'=>'teachers'
+                'rol'=>'students'
             ]
         ];
 

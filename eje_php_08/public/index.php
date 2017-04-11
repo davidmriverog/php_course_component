@@ -2,4 +2,13 @@
 
 require (__DIR__.'/../bootstrap/start.php');
 
-view('index',compact('access'));
+use Styde\Container;
+
+function homeController()
+{
+    $access = Container::getInstance()->access();
+
+    view('index',compact('access'));
+}
+
+return homeController();
