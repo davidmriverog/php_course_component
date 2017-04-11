@@ -1,6 +1,7 @@
 <?php
 
-function view($template,array $vars){
+function view($template,array $vars)
+{
 
     extract($vars);
 
@@ -14,4 +15,26 @@ function view($template,array $vars){
     $templateContent = ob_get_clean();
 
     require($path. 'layout.php');
+}
+
+function abort404()
+{
+
+    $data = [
+        'user_data'=>[
+            'name'=>'David Rivero',
+            'rol'=>'students'
+        ]
+    ];
+
+    $driver = new \Styde\SessionArrayDriver($data);
+    $session = new \Styde\SessionManager($driver);
+    $auth = new \Styde\Authenticator($session);
+    $access = new \Styde\AccessHandler($auth);
+
+    http_response_code(404);
+
+    view('page404',compact('access'));
+
+    exit();
 }

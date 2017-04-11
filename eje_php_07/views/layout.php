@@ -42,10 +42,10 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <?php if(Access::check(['students'])){ ?>
+            <?php if($access->check('students')){ ?>
             <li><a href="students.php">Students</a></li>
             <?php } ?>
-            <?php if(Access::check(['teachers'])){ ?>
+            <?php if($access->check('teachers')){ ?>
             <li><a href="teachers.php">Teachers</a></li>
             <?php } ?>
           </ul>

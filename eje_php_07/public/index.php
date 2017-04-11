@@ -10,6 +10,10 @@ $data = [
     ]
 ];
 
-view('index',[
+$driver = new \Styde\SessionArrayDriver($data);
+$session = new \Styde\SessionManager($driver);
+$auth = new \Styde\Authenticator($session);
+$access = new \Styde\AccessHandler($auth);
 
-]);
+
+view('index',compact('access'));
