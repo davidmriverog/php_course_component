@@ -2,20 +2,15 @@
 
 require (__DIR__.'/../bootstrap/start.php');
 
-$data = [
-    'user_data'=>[
-        'name'=>'David Rivero',
-        'rol'=>'students'
-    ]
-];
+function teacherController(){
 
-$driver = new \Styde\SessionArrayDriver($data);
-$session = new \Styde\SessionManager($driver);
-$auth = new \Styde\Authenticator($session);
-$access = new \Styde\AccessHandler($auth);
+    global $access;
 
-if(!$access->check('teachers')){
-    abort404();
+    if(!$access->check('teachers')){
+        abort404();
+    }
+
+    view('teachers',compact('access'));
 }
 
-view('teachers',compact('access'));
+teacherController();
