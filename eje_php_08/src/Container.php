@@ -4,8 +4,27 @@ namespace Styde;
 
 class Container
 {
+    protected static $container;
 
     protected $shared = array();
+
+    public function getInstance()
+    {
+        if(static::$container === null)
+            static::$container = new Container;
+
+        return static::$container;
+    }
+
+    public function setContainer(Container $container)
+    {
+        static::$container = $container;
+    }
+
+    public function clearContainer()
+    {
+        static::$container = null;
+    }
 
     public function session()
     {
