@@ -47,5 +47,5 @@ class Foo
 
 class Bar
 {
-	//
+	
 }
