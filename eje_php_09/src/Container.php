@@ -2,61 +2,40 @@
 
 namespace Styde;
 
+use Closure;
+
 class Container
 {
-    protected static $container;
+	protected $bindings = [];
 
-    protected $shared = array();
+	protected $shared = [];
 
-    public static function getInstance()
-    {
-        if(static::$container === null)
-            static::$container = new Container;
+	public function bind($name,$resolver)
+	{
+		$this->bindings[$name] = [
+			'resolver'=>$resolver		
+		];
+	}
 
-        return static::$container;
-    }
+	public function instance($name,$object)
+	{
+		$this->shared[$name] = $object;
+	}
 
-    public static function setContainer(Container $container)
-    {
-        static::$container = $container;
-    }
+	public function make($name)
+	{
+		if(isset($this->shared[$name]))
+			return $this->shared[$name];
 
-    public static function clearContainer()
-    {
-        static::$container = null;
-    }
+		$resolver = $this->bindings[$name]['resolver'];
 
-    public function session()
-    {
-        if(isset($this->shared['session']))
-            return $this->shared['session'];
+		if($resolver instanceof Closure){
+			$object = $resolver($this);
+		}else{
+			$object = new $resolver;
+		}
+		
 
-        $data = [
-            'user_data'=>[
-                'name'=>'David Rivero',
-                'rol'=>'students'
-            ]
-        ];
-
-        $driver = new SessionArrayDriver($data);
-
-        return $this->shared['session'] = new SessionManager($driver);
-    }
-
-    public function auth()
-    {
-        if(isset($this->shared['auth']))
-            return $this->shared['auth'];
-
-        return $this->shared['auth'] = new Authenticator($this->session());
-    }
-
-    public function access()
-    {
-        if(isset($this->shared['access']))
-            return $this->shared['access'];
-
-        return $this->shared['access'] = new AccessHandler($this->auth());
-    }
-
+		return $object;
+	}
 }
