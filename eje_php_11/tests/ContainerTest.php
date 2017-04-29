@@ -1,6 +1,7 @@
 <?php 
 
 use Styde\Container;
+use Styde\ContainerException;
 
 class ContainerTest extends PHPUnit_Framework_TestCase
 {
@@ -44,6 +45,37 @@ class ContainerTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Foo',$container->make('foo'));
 	}
+
+	/**
+	 * @expectedException \Styde\ContainerException
+	 * @expectedExceptionMessage Unable to build [qux] because Class Norf does not exist
+	 */
+	public function test_exception_container()
+	{
+		/*
+		$this->setExpectedException(
+			ContainerException::class,
+			'Unable to build [qux] because Class Norf does not exist'
+		);*/
+
+		$container = new Container;
+
+		$container->build('qux','Qux');
+
+		$container->make('qux');
+	}
+
+	/**
+	 * @expectedException \ReflectionException
+	 */
+	public function test_does_not_class()
+	{
+		$container = new Container;
+
+		$container->build('norf','Norf');
+
+		$container->make('norf');	
+	}
 }
 
 class Foo
@@ -72,3 +104,11 @@ class Baz
 {
 	//
 } 
+
+class Qux
+{
+	public function __construct(Norf $norf)
+	{
+		//
+	}
+}
