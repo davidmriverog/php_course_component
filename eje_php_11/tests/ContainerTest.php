@@ -67,7 +67,8 @@ class FooBar
 	//
 }
 
+
 class Baz
 {
 	//
-}
+} 

@@ -60,7 +60,19 @@ class Container
 
 		foreach ($constructParams as $key => $value) {
 			
-			$paramClassName = $value->getClass()->getName();
+			try {
+
+				$paramClassName = $value->getClass()->getName();
+
+			} catch (\ReflectionException $refEx) {
+				throw new ContainerException(
+					"Unable to build [$name] because ".$refEx->getMessage(),
+					null,
+					$refEx
+				);
+			}
+
+			
 
 			// $arguments[] = new $paramClassName;
 			$arguments[] = $this->build($paramClassName);
