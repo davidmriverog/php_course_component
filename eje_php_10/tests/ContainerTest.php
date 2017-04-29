@@ -48,13 +48,26 @@ class ContainerTest extends PHPUnit_Framework_TestCase
 
 class Foo
 {
-	public function __construct(Bar $bar)
+	public function __construct(Bar $bar,Baz $baz)
 	{
 		// 
 	}
 }
 
 class Bar
+{
+	public function __construct(FooBar $barTwo)
+	{
+		//
+	}
+}
+
+class FooBar
+{
+	//
+}
+
+class Baz
 {
 	//
 }

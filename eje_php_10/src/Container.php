@@ -62,7 +62,8 @@ class Container
 			
 			$paramClassName = $value->getClass()->getName();
 
-			$arguments[] = new $paramClassName;
+			// $arguments[] = new $paramClassName;
+			$arguments[] = $this->build($paramClassName);
 		}
 
 		return $reflection->newInstanceArgs($arguments);
