@@ -48,13 +48,24 @@ class Container
 			throw new \InvalidArgumentException('$name is not instantiable!');
 		}
 
-		$construct = $reflection->getConstructor();
+		$construct = $reflection->getConstructor(); // ReflectionMethod
 
 		if(is_null($construct)){
 			return new $name;
 		}
 
-		$constructParams = $construct->getParameters();
+		$constructParams = $construct->getParameters(); // List ReflectionParameter Class
+
+		$arguments = array();
+
+		foreach ($constructParams as $key => $value) {
+			
+			$paramClassName = $value->getClass()->getName();
+
+			$arguments[] = new $paramClassName;
+		}
+
+		return $reflection->newInstanceArgs($arguments);
 
 	}
 }
