@@ -7,109 +7,125 @@ use ReflectionClass;
 
 class Container
 {
-	protected $bindings = [];
+    protected $bindings = [];
 
-	protected $shared = [];
+    protected $shared = [];
 
-	public function bind($name,$resolver,$shared=false)
-	{
-		$this->bindings[$name] = [
-			'resolver'=>$resolver,
-			'shared'=>$shared
-		];
-	}
+    private static $instance;
 
-	public function instance($name,$object)
-	{
-		$this->shared[$name] = $object;
-	}
+    public static function getInstance()
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new Container;
+        }
 
-	public function singleton($name,$resolver)
-	{
-		$this->bind($name,$resolver,TRUE);
-	}
+        return static::$instance;
+    }
 
-	public function make($name, array $arguments=array())
-	{
-		if(isset($this->shared[$name]))
-			return $this->shared[$name];
+    public static function setInstance(Container $container)
+    {
+        static::$container = $container;
+    }
 
-		if(isset($this->bindings[$name])){
-			$resolver = $this->bindings[$name]['resolver'];
-			$shared = $this->bindings[$name]['shared'];
-		}else{
-			$resolver = $name;
-			$shared = false;
-		}
-		
+    public function bind($name,$resolver,$shared=false)
+    {
+        $this->bindings[$name] = [
+            'resolver'=>$resolver,
+            'shared'=>$shared
+        ];
+    }
 
-		if($resolver instanceof Closure){
-			$object = $resolver($this);
-		}else{
-			$object = $this->build($resolver,$arguments);
-		}
+    public function instance($name,$object)
+    {
+        $this->shared[$name] = $object;
+    }
 
-		if($shared){
-			$this->shared[$name] = $object;
-		}
-		
+    public function singleton($name,$resolver)
+    {
+        $this->bind($name,$resolver,TRUE);
+    }
 
-		return $object;
-	}
+    public function make($name, array $arguments=array())
+    {
+        if(isset($this->shared[$name]))
+            return $this->shared[$name];
 
-	public function build($name,array $arguments=array())
-	{
-		$reflection = new ReflectionClass($name);
+        if(isset($this->bindings[$name])){
+            $resolver = $this->bindings[$name]['resolver'];
+            $shared = $this->bindings[$name]['shared'];
+        }else{
+            $resolver = $name;
+            $shared = false;
+        }
+        
 
-		if(!$reflection->isInstantiable()){
-			throw new \InvalidArgumentException('$name is not instantiable!');
-		}
+        if($resolver instanceof Closure){
+            $object = $resolver($this);
+        }else{
+            $object = $this->build($resolver,$arguments);
+        }
 
-		$construct = $reflection->getConstructor(); // ReflectionMethod
+        if($shared){
+            $this->shared[$name] = $object;
+        }
+        
 
-		if(is_null($construct)){
-			return new $name;
-		}
+        return $object;
+    }
 
-		$constructParams = $construct->getParameters(); // List ReflectionParameter Class
+    public function build($name,array $arguments=array())
+    {
+        $reflection = new ReflectionClass($name);
 
-		$dependencies = array();
+        if(!$reflection->isInstantiable()){
+            throw new \InvalidArgumentException('$name is not instantiable!');
+        }
 
-		foreach ($constructParams as $key => $value) {
+        $construct = $reflection->getConstructor(); // ReflectionMethod
+
+        if(is_null($construct)){
+            return new $name;
+        }
+
+        $constructParams = $construct->getParameters(); // List ReflectionParameter Class
+
+        $dependencies = array();
+
+        foreach ($constructParams as $key => $value) {
 
 
-			if(isset($arguments[$value->getName()])){
-				$dependencies[] = $arguments[$value->getName()];
+            if(isset($arguments[$value->getName()])){
+                $dependencies[] = $arguments[$value->getName()];
 
-				continue;
-			}
+                continue;
+            }
 
-			try {
+            try {
 
-				$paramClass = $value->getClass();
+                $paramClass = $value->getClass();
 
-			} catch (\ReflectionException $e) {
-				throw new ContainerException(
-					"Unable to build [$name] because ".$e->getMessage(),
-					null,
-					$e
-				);
-			}
+            } catch (\ReflectionException $e) {
+                throw new ContainerException(
+                    "Unable to build [$name] because ".$e->getMessage(),
+                    null,
+                    $e
+                );
+            }
 
-			if(!is_null($paramClass)){
-				$paramClassName = $paramClass->getName();
+            if(!is_null($paramClass)){
+                $paramClassName = $paramClass->getName();
 
-				// $arguments[] = new $paramClassName;
-				$dependencies[] = $this->build($paramClassName,$arguments);
-			}else{
-				throw new ContainerException(
-					"please provide the value of the parameter {$value->getName()}"
-				);
-			}
-			
-		}
+                // $arguments[] = new $paramClassName;
+                $dependencies[] = $this->build($paramClassName,$arguments);
+            }else{
+                throw new ContainerException(
+                    "please provide the value of the parameter {$value->getName()}"
+                );
+            }
+            
+        }
 
-		return $reflection->newInstanceArgs($dependencies);
+        return $reflection->newInstanceArgs($dependencies);
 
-	}
+    }
 }
