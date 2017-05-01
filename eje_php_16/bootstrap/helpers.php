@@ -2,7 +2,7 @@
 
 use Styde\Container;
 
-function view($template,array $vars)
+function view($template,array $vars=array())
 {
 
     extract($vars);

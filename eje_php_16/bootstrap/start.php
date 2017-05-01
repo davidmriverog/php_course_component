@@ -3,7 +3,7 @@
 require __DIR__.'/../vendor/autoload.php';
 
 
-class_alias('Styde\AccessHandler','Access');
+class_alias('Styde\Facades\Access','Access');
 
 
 $whoops = new \Whoops\Run;
