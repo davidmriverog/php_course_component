@@ -18,6 +18,8 @@ use Styde\Container;
 
 $container = Container::getInstance();
 
+\Styde\Facades\Access::setContainer($container);
+
 $container->singleton('session',function(){
 
     $data = [
