@@ -6,7 +6,7 @@ use Styde\Container;
 
 function studentsController()
 {
-    $access = Container::getInstance()->access();
+    $access = Container::getInstance()->make('access');
 
     if(!$access->check('students')){
         abort404();

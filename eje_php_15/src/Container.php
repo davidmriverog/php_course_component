@@ -11,7 +11,7 @@ class Container
 
     protected $shared = [];
 
-    private static $instance;
+    protected static $instance;
 
     public static function getInstance()
     {

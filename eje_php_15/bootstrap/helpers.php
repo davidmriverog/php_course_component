@@ -21,7 +21,7 @@ function view($template,array $vars)
 
 function abort404()
 {
-    $access = Container::getInstance()->access();
+    $access = Container::getInstance()->make('access');
     
     http_response_code(404);
 

@@ -6,7 +6,7 @@ use Styde\Container;
 
 function homeController()
 {
-    $access = Container::getInstance()->access();
+    $access = Container::getInstance()->make('access');
 
     view('index',compact('access'));
 }

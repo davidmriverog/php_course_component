@@ -10,12 +10,13 @@ $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
-use Styde\SessionFileDriver;
+use Styde\SessionArrayDriver;
 use Styde\SessionManager;
 use Styde\Authenticator;
 use Styde\AccessHandler;
+use Styde\Container;
 
-$container = new \Styde\Container::getInstance();
+$container = Container::getInstance();
 
 $container->singleton('session',function(){
 
