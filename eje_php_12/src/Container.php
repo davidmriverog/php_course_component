@@ -23,24 +23,29 @@ class Container
 		$this->shared[$name] = $object;
 	}
 
-	public function make($name)
+	public function make($name, array $arguments=array())
 	{
 		if(isset($this->shared[$name]))
 			return $this->shared[$name];
 
-		$resolver = $this->bindings[$name]['resolver'];
+		if(isset($this->bindings[$name])){
+			$resolver = $this->bindings[$name]['resolver'];
+		}else{
+			$resolver = $name;
+		}
+		
 
 		if($resolver instanceof Closure){
 			$object = $resolver($this);
 		}else{
-			$object = $this->build($resolver);
+			$object = $this->build($resolver,$arguments);
 		}
 		
 
 		return $object;
 	}
 
-	public function build($name)
+	public function build($name,array $arguments=array())
 	{
 		$reflection = new ReflectionClass($name);
 
@@ -56,29 +61,43 @@ class Container
 
 		$constructParams = $construct->getParameters(); // List ReflectionParameter Class
 
-		$arguments = array();
+		$dependencies = array();
 
 		foreach ($constructParams as $key => $value) {
-			
+
+
+			if(isset($arguments[$value->getName()])){
+				$dependencies[] = $arguments[$value->getName()];
+
+				continue;
+			}
+
 			try {
 
-				$paramClassName = $value->getClass()->getName();
+				$paramClass = $value->getClass();
 
-			} catch (\ReflectionException $refEx) {
+			} catch (\ReflectionException $e) {
 				throw new ContainerException(
-					"Unable to build [$name] because ".$refEx->getMessage(),
+					"Unable to build [$name] because ".$e->getMessage(),
 					null,
-					$refEx
+					$e
 				);
 			}
 
-			
+			if(!is_null($paramClass)){
+				$paramClassName = $paramClass->getName();
 
-			// $arguments[] = new $paramClassName;
-			$arguments[] = $this->build($paramClassName);
+				// $arguments[] = new $paramClassName;
+				$dependencies[] = $this->build($paramClassName,$arguments);
+			}else{
+				throw new ContainerException(
+					"please provide the value of the parameter {$value->getName()}"
+				);
+			}
+			
 		}
 
-		return $reflection->newInstanceArgs($arguments);
+		return $reflection->newInstanceArgs($dependencies);
 
 	}
 }

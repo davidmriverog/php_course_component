@@ -60,7 +60,7 @@ class ContainerTest extends PHPUnit_Framework_TestCase
 
 		$container = new Container;
 
-		$container->build('qux','Qux');
+		//$container->build('qux','Qux');
 
 		$container->make('qux');
 	}
@@ -72,7 +72,7 @@ class ContainerTest extends PHPUnit_Framework_TestCase
 	{
 		$container = new Container;
 
-		$container->build('norf','Norf');
+		//$container->build('norf','Norf');
 
 		$container->make('norf');	
 	}
