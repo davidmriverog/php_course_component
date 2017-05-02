@@ -5,7 +5,9 @@ require __DIR__.'/../vendor/autoload.php';
 
 class_alias('Styde\Facades\Access','Access');
 
+use Styde\Container;
 use Styde\Application;
+
 
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
@@ -18,11 +20,10 @@ $container = Container::getInstance();
 
 $app = new Application($container);
 
-$app->register();
+$app->registerProviders([
+    Styde\Providers\SessionProviders::class,
+    Styde\Providers\AuthenticatorProviders::class,
+    Styde\Providers\AccessHandlerProviders::class,
+]);
 
-/*
-$app->registerSessionManager();
-$app->registerAuthenticator();
-$app->registerAccessHandler();
-*/
-
+//$app->register();
