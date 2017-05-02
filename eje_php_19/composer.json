@@ -1,5 +1,5 @@
 {
-    "name": "drivero/containe",
+    "name": "drivero/container",
     "description": "This project is a Trial, please do not use.",
     "type": "library",
     "license": "MIT",
@@ -14,5 +14,10 @@
         "phpunit/phpunit": "^5.7",
         "mockery/mockery": "^0.9.9"
     },
-    "require": {}
+    "require": {},
+    "autoload":{
+        "psr-4":{
+            "Styde\\Container\\":"src/"
+        }
+    }
 }
